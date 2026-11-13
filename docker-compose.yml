@@ -1,0 +1,31 @@
+services:
+  bot:
+    build: .
+    container_name: all-in-one-tools-bot
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - ./data:/app/data            # SQLite (users + stats)
+    tmpfs:
+      - /tmp/toolsbot:size=2g       # temporary work files — wiped on restart
+    deploy:
+      resources:
+        limits:
+          memory: 2g
+
+  # ── اختياري: Local Bot API Server لرفع/تنزيل ملفات حتى 2GB ──
+  # شغّله بالأمر:  docker compose --profile local-api up -d
+  # ثم ضع في .env:  LOCAL_API_URL=http://telegram-bot-api:8081  (و MAX_FILE_MB=2000)
+  telegram-bot-api:
+    profiles: ["local-api"]
+    image: aiogram/telegram-bot-api:latest
+    restart: unless-stopped
+    environment:
+      TELEGRAM_API_ID: ${TELEGRAM_API_ID:-}       # من https://my.telegram.org
+      TELEGRAM_API_HASH: ${TELEGRAM_API_HASH:-}
+      TELEGRAM_LOCAL: "1"
+    volumes:
+      - telegram-bot-api-data:/var/lib/telegram-bot-api
+
+volumes:
+  telegram-bot-api-data:
