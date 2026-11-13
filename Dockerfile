@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
       libreoffice-writer libreoffice-calc libreoffice-impress \
       tesseract-ocr tesseract-ocr-ara tesseract-ocr-eng \
       libpango-1.0-0 libpangoft2-1.0-0 libharfbuzz-subset0 \
-      fonts-noto-core fonts-dejavu-core fonts-amiri fonts-liberation \
+      fonts-noto-core fonts-dejavu-core fonts-hosny-amiri fonts-liberation \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
